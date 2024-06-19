@@ -1,0 +1,42 @@
+#
+# Copyright (C) 2022 Nethesis S.r.l.
+# SPDX-License-Identifier: GPL-3.0-or-later
+#
+
+[Unit]
+Description=Podman  rally-app.service
+BindsTo=rally.service
+After=rally.service postgresql-app.service
+
+[Service]
+Environment=PODMAN_SYSTEMD_UNIT=%n
+EnvironmentFile=%S/state/environment
+EnvironmentFile=-%S/state/smarthost.env
+WorkingDirectory=%S/state
+Restart=always
+TimeoutStopSec=70
+ExecStartPre=/bin/mkdir -p config
+ExecStartPre=/bin/rm -f %t/rally-app.pid %t/rally-app.ctr-id
+ExecStartPre=-runagent discover-smarthost
+ExecStart=/usr/bin/podman run --conmon-pidfile %t/rally-app.pid \
+    --cidfile %t/rally-app.ctr-id --cgroups=no-conmon \
+    --pod-id-file %t/rally.pod-id --replace -d --name  rally-app \
+    --env=RALLY_* \
+    --env SECRET_PASSWORD=${SECRET_PASSWORD} \
+    --env SMTP_HOST=${SMTP_HOST} \
+    --env SUPPORT_EMAIL=${SUPPORT_EMAI} \
+    --env SMTP_SECURE=${SMTP_SECURE} \
+    --env SMTP_PORT=${SMTP_PORT} \
+    --env SMTP_USER=${SMTP_USER} \
+    --env SMTP_PWD=${SMTP_PWD} \
+    --env 'DATABASE_URL="postgresql://postgres:Nethesis,1234@127.0.0.1:5432/rally"' \
+    ${RALLY_IMAGE}
+ExecStop=/usr/bin/podman stop --ignore --cidfile %t/rally-app.ctr-id -t 10
+ExecReload=/usr/bin/podman kill -s HUP rally-app
+SyslogIdentifier=%u
+ExecStopPost=/usr/bin/podman rm --ignore -f --cidfile %t/rally-app.ctr-id
+PIDFile=%t/rally-app.pid
+Type=forking
+
+[Install]
+WantedBy=default.target

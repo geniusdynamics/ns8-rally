@@ -13,21 +13,19 @@ import agent
 # If parsing fails, output everything to stderr
 data = json.load(sys.stdin)
 
-#This is specific to you module, so you need to change it accordingly.
-# we read a json stdin {"vars1":true, "var2":"foo", "vars3": 3} and we writ it to .config/state/environment
-# Upper case to set environment variable and minor case to read from stdin
+# rally domain settings
+host = data.get("host", "")
+NEXT_PUBLIC_BASE_URL = "https://"+host
 
-# this values must exists in the json stdin
-# agent.set_env("MAIL_SERVER", data["mail_server"])
-# agent.set_env("LDAP_DOMAIN", data["ldap_domain"])
-
-# you can add default values for the following variables
-# agent.set_env("MAIL_DOMAIN",data.get("mail_domain",""))
-# agent.set_env("WOWORKERSCOUNT",data.get("workers_count",3))
-# agent.set_env("AUXILIARYACCOUNT",data.get("auxiliary_account",True))
-# agent.set_env("ACTIVESYNC",data.get("activesync",False))
-
-
+# Testing SMTP Settings on Enviroment
+rdb = agent.redis_connect(use_replica=True)
+smtp_settings = agent.get_smarthost_settings(rdb)
+agent.set_env("SMTP_HOST", smtp_settings['host'])
+agent.set_env("SMTP_PORT", smtp_settings['port'])
+agent.set_env("SMTP_USER", smtp_settings['username'])
+agent.set_env("SMTP_PWD", smtp_settings['password'])
+agent.set_env("SMTP_SECURE", smtp_settings['encrypt_smtp'])
+agent.set_env("SUPPORT_EMAIL", smtp_settings['username'])
 # Make sure everything is saved inside the environment file
 # just before starting systemd unit
-#agent.dump_env()
+agent.dump_env()
