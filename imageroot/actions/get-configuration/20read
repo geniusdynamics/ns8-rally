@@ -20,6 +20,7 @@ config = {}
 # Read current configuration from the environment file
 config["host"] = os.getenv("TRAEFIK_HOST","")
 config["NEXT_PUBLIC_BASE_URL"] = os.getenv("NEXT_PUBLIC_BASE_URL","")
+config["NEXTAUTH_URL"] = os.getenv("NEXTAUTH_URL","")
 config["http2https"] = os.getenv("TRAEFIK_HTTP2HTTPS") == "True"
 config["lets_encrypt"] = os.getenv("TRAEFIK_LETS_ENCRYPT") == "True"
 config["SECRET_PASSWORD"] = os.getenv("SECRET_PASSWORD","")

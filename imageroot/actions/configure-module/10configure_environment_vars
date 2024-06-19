@@ -16,7 +16,7 @@ data = json.load(sys.stdin)
 # rally domain settings
 host = data.get("host", "")
 NEXT_PUBLIC_BASE_URL = "https://"+host
-
+NEXTAUTH_URL = "https://"+host
 # Testing SMTP Settings on Enviroment
 rdb = agent.redis_connect(use_replica=True)
 smtp_settings = agent.get_smarthost_settings(rdb)
