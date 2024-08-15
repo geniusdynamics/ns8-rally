@@ -61,6 +61,17 @@
                 $t("settings.enabled")
               }}</template>
             </cv-toggle>
+
+            <cv-text-input
+                :label="$t('Allowed Emails')"
+                placeholder="Allowed Emails separate with comma or use *@example.com wildcard syntax"
+                v-model="ALLOWED_EMAILS"
+                class="mg-bottom"
+                :invalid-message="$t(error.ALLOWED_EMAILS)"
+                :disabled="loading.getConfiguration || loading.configureModule"
+                ref="ALLOWED_EMAILS"
+            >
+            </cv-text-input>
               <!-- advanced options -->
             <cv-accordion ref="accordion" class="maxwidth mg-bottom">
               <cv-accordion-item :open="toggleAccordion[0]">
@@ -125,6 +136,7 @@ export default {
       host: "",
       isLetsEncryptEnabled: false,
       isHttpToHttpsEnabled: true,
+      ALLOWED_EMAILS: "",
       loading: {
         getConfiguration: false,
         configureModule: false,
@@ -135,6 +147,7 @@ export default {
         host: "",
         lets_encrypt: "",
         http2https: "",
+        ALLOWED_EMAILS: "",
       },
     };
   },
@@ -202,6 +215,7 @@ export default {
       this.host = config.host;
       this.isLetsEncryptEnabled = config.lets_encrypt;
       this.isHttpToHttpsEnabled = config.http2https;
+      this.ALLOWED_EMAILS = config.ALLOWED_EMAILS;
 
       this.loading.getConfiguration = false;
       this.focusElement("host");
@@ -271,6 +285,7 @@ export default {
             host: this.host,
             lets_encrypt: this.isLetsEncryptEnabled,
             http2https: this.isHttpToHttpsEnabled,
+            ALLOWED_EMAILS: this.ALLOWED_EMAILS,
           },
           extra: {
             title: this.$t("settings.instance_configuration", {

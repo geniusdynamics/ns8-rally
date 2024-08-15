@@ -16,6 +16,11 @@ import agent
 
 # Prepare return variable
 config = {}
+if os.path.exists("rally.env"):
+    data = agent.read_envfile("rally.env")
+    config["ALLOWED_EMAILS"] = data['ALLOWED_EMAILS']
+else:
+    config["ALLOWED_EMAILS"] = ""
 
 # Read current configuration from the environment file
 config["host"] = os.getenv("TRAEFIK_HOST","")
