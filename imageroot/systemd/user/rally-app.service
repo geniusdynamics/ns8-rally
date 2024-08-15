@@ -21,17 +21,7 @@ ExecStartPre=-runagent discover-smarthost
 ExecStart=/usr/bin/podman run --conmon-pidfile %t/rally-app.pid \
     --cidfile %t/rally-app.ctr-id --cgroups=no-conmon \
     --pod-id-file %t/rally.pod-id --replace -d --name  rally-app \
-    --env=RALLY_* \
-    --env SECRET_PASSWORD=${SECRET_PASSWORD} \
-    --env NEXT_PUBLIC_SELF_HOSTED=true \
-    --env NEXT_PUBLIC_BASE_URL=${NEXT_PUBLIC_BASE_URL} \
-    --env SMTP_HOST=${SMTP_HOST} \
-    --env SUPPORT_EMAIL=${SUPPORT_EMAIL} \
-    --env SMTP_SECURE=${SMTP_SECURE} \
-    --env SMTP_PORT=${SMTP_PORT} \
-    --env SMTP_USER=${SMTP_USER} \
-    --env SMTP_PWD=${SMTP_PWD} \
-    --env 'DATABASE_URL="postgresql://postgres:Nethesis,1234@127.0.0.1:5432/rally"' \
+    --env-file=%S/state/rally.env \
     ${RALLY_IMAGE}
 ExecStop=/usr/bin/podman stop --ignore --cidfile %t/rally-app.ctr-id -t 10
 ExecReload=/usr/bin/podman kill -s HUP rally-app

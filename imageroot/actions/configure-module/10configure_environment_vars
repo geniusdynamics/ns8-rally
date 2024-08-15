@@ -9,6 +9,7 @@ import json
 import sys
 import agent
 
+
 # Try to parse the stdin as JSON.
 # If parsing fails, output everything to stderr
 data = json.load(sys.stdin)
@@ -20,12 +21,25 @@ NEXTAUTH_URL = "https://"+host
 # Testing SMTP Settings on Enviroment
 rdb = agent.redis_connect(use_replica=True)
 smtp_settings = agent.get_smarthost_settings(rdb)
-agent.set_env("SMTP_HOST", smtp_settings['host'])
-agent.set_env("SMTP_PORT", smtp_settings['port'])
-agent.set_env("SMTP_USER", smtp_settings['username'])
-agent.set_env("SMTP_PWD", smtp_settings['password'])
-agent.set_env("SMTP_SECURE", smtp_settings['encrypt_smtp'])
-agent.set_env("SUPPORT_EMAIL", smtp_settings['username'])
+ALLOWED_EMAILS = data.get("ALLOWED_EMAILS", "")
+SMTP_HOST = smtp_settings['host']
+SMTP_PORT = smtp_settings['port']
+SMTP_USER = smtp_settings['username']
+SMTP_PWD = smtp_settings['password']
+SMTP_SECURE = 'false' if smtp_settings['tls_verify'] else 'true'
+SUPPORT_EMAIL = smtp_settings['username']
+
+rally = {
+    "NEXT_PUBLIC_BASE_URL": NEXT_PUBLIC_BASE_URL,
+    "SMTP_HOST": SMTP_HOST,
+    "SMTP_PORT": SMTP_PORT,
+    "SMTP_USER": SMTP_USER,
+    "SMTP_PWD": SMTP_PWD,
+    "SMTP_SECURE": SMTP_SECURE,
+    "NOREPLY_EMAIL": SUPPORT_EMAIL,
+    "ALLOWED_EMAILS": ALLOWED_EMAILS,
+}
+agent.write_envfile("rally.env", rally)
 # Make sure everything is saved inside the environment file
 # just before starting systemd unit
 agent.dump_env()
