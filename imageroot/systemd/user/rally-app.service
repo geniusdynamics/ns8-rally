@@ -22,6 +22,7 @@ ExecStart=/usr/bin/podman run --conmon-pidfile %t/rally-app.pid \
     --cidfile %t/rally-app.ctr-id --cgroups=no-conmon \
     --pod-id-file %t/rally.pod-id --replace -d --name  rally-app \
     --env-file=%S/state/rally.env \
+    --env-file=%S/state/rally-db.env \
     ${RALLLY_IMAGE}
 ExecStop=/usr/bin/podman stop --ignore --cidfile %t/rally-app.ctr-id -t 10
 ExecReload=/usr/bin/podman kill -s HUP rally-app
