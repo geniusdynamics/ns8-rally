@@ -38,6 +38,7 @@ rally = {
     "SMTP_SECURE": SMTP_SECURE,
     "NOREPLY_EMAIL": SUPPORT_EMAIL,
     "ALLOWED_EMAILS": ALLOWED_EMAILS,
+    "SUPPORT_EMAIL": SUPPORT_EMAIL,
 }
 agent.write_envfile("rally.env", rally)
 # Make sure everything is saved inside the environment file
