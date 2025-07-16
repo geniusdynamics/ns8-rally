@@ -16,18 +16,18 @@ data = json.load(sys.stdin)
 
 # rally domain settings
 host = data.get("host", "")
-NEXT_PUBLIC_BASE_URL = "https://"+host
-NEXTAUTH_URL = "https://"+host
+NEXT_PUBLIC_BASE_URL = "https://" + host
+NEXTAUTH_URL = "https://" + host
 # Testing SMTP Settings on Enviroment
 rdb = agent.redis_connect(use_replica=True)
 smtp_settings = agent.get_smarthost_settings(rdb)
 ALLOWED_EMAILS = data.get("ALLOWED_EMAILS", "")
-SMTP_HOST = smtp_settings['host']
-SMTP_PORT = smtp_settings['port']
-SMTP_USER = smtp_settings['username']
-SMTP_PWD = smtp_settings['password']
-SMTP_SECURE = 'false' if smtp_settings['tls_verify'] else 'true'
-SUPPORT_EMAIL = smtp_settings['username']
+SMTP_HOST = smtp_settings["host"]
+SMTP_PORT = smtp_settings["port"]
+SMTP_USER = smtp_settings["username"]
+SMTP_PWD = smtp_settings["password"]
+SMTP_SECURE = "false" if smtp_settings["tls_verify"] else "true"
+SUPPORT_EMAIL = smtp_settings["username"]
 
 rally = {
     "NEXT_PUBLIC_BASE_URL": NEXT_PUBLIC_BASE_URL,
