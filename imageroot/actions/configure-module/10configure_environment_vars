@@ -27,7 +27,12 @@ SMTP_PORT = smtp_settings["port"]
 SMTP_USER = smtp_settings["username"]
 SMTP_PWD = smtp_settings["password"]
 SMTP_SECURE = "false" if smtp_settings["tls_verify"] else "true"
-SUPPORT_EMAIL = smtp_settings.get("username", "support@rallly.co")
+SUPPORT_EMAIL = (
+    smtp_settings.get(
+        "username",
+    )
+    or "support@rallly.co"
+)
 
 rally = {
     "NEXT_PUBLIC_BASE_URL": NEXT_PUBLIC_BASE_URL,
