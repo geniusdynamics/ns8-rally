@@ -1,9 +1,12 @@
 {
   "name": "Rally",
   "description": {
-    "en": "Ditch the back-and-forth emails Streamline your scheduling process and save time"
+    "en": "Ditch the back-and-forth emails Streamline your scheduling process and save time",
+    "it": "Rallly semplifica la scelta della data di una riunione con sondaggi di disponibilità."
   },
-  "categories": [],
+  "categories": [
+    "collaboration"
+  ],
   "authors": [
     {
       "name": "Martin Bhuong",
